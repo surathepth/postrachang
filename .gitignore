@@ -1,0 +1,22 @@
+# Dependencies & Temporary Folders
+node_modules/
+scratch/
+
+# Local Backups & Archives
+Backups/
+BACKUPFILE/
+
+# Prompt Notes & Local Reference Folders
+00001-*/
+10001-*/
+01-*/
+1-*/
+คำสั่งงานรายละเอียดข้อมูล/
+รวมข้อมูลระบบPos-ตราชั่ง/
+
+# Media & Driver Binaries
+*.mp4
+*.zip
+*.exe
+*.rpm
+*.msi
