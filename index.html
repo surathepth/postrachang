@@ -1002,53 +1002,69 @@
       display: none;
     }
 
-    @media (max-width: 900px) {
-      /* Mobile Header */
-      header.pos-header {
-        height: auto;
-        min-height: 46px;
-        padding: 4px 8px;
-        flex-wrap: wrap;
-        gap: 4px;
+    /* ==========================================================================
+       MOBILE, TABLET & SMARTPHONE RESPONSIVE ENGINE (ENTERPRISE HIGH-DENSITY POS)
+       Supports: Phone Portrait, Phone Landscape, iPad, Tablet, & Touch Terminals
+       Desktop PC & 14" POS Terminal (>900px width & >540px height) Remain Untouched
+       ========================================================================== */
+
+    @media (max-width: 900px), (max-height: 540px) {
+      /* 1. Header ย่อส่วนกะทัดรัด */
+      header.compact-header {
+        height: 44px;
+        min-height: 44px;
+        padding: 2px 8px;
+        gap: 6px;
+      }
+      .brand-section {
+        gap: 6px;
+      }
+      .brand-logo {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        border-radius: 6px;
       }
       .brand-title {
         font-size: 13.5px;
+        font-weight: 800;
       }
       .status-group {
-        overflow-x: auto;
-        max-width: 100%;
-        padding-bottom: 2px;
         gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .status-group::-webkit-scrollbar {
+        display: none;
       }
       .status-pill {
-        font-size: 10px;
-        padding: 2px 5px;
+        font-size: 10.5px;
+        padding: 3px 7px;
+        gap: 4px;
       }
       .header-actions {
-        overflow-x: auto;
-        max-width: 100%;
-        padding-bottom: 2px;
         gap: 4px;
       }
       .hdr-btn {
-        font-size: 11px;
+        height: 32px;
+        font-size: 11.5px;
         padding: 4px 8px;
-        white-space: nowrap;
       }
 
-      /* Mobile Segment Switcher Tabs */
+      /* 2. แถบสลับหน้าจอ 3 แท็บ (สินค้า / ตราชั่ง / บิลขาย) */
       .pos-mobile-nav {
         display: flex;
         background: #0f172a;
-        padding: 4px 8px;
-        gap: 6px;
+        padding: 4px 6px;
+        gap: 5px;
         border-bottom: 2px solid #0284c7;
         flex-shrink: 0;
       }
       .mob-nav-btn {
         flex: 1;
-        padding: 8px 4px;
-        font-size: 13.5px;
+        padding: 6px 4px;
+        font-size: 13px;
         font-weight: 800;
         background: #1e293b;
         color: #94a3b8;
@@ -1058,7 +1074,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 4px;
         transition: all 0.15s ease;
       }
       .mob-nav-btn.active {
@@ -1077,22 +1093,23 @@
         margin-left: 2px;
       }
 
-      /* Mobile POS Container Viewport */
+      /* 3. กล่องหน้าจอหลัก (สลับแสดงผลทีละแท็บอย่างลื่นไหล) */
       main.pos-container {
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 100px);
+        height: calc(100vh - 86px);
         padding: 4px;
         gap: 4px;
         position: relative;
+        background: #e2e8f0;
       }
 
-      /* View-based Column Display */
       main.pos-container[data-mobile-view="products"] .col-products {
         display: flex !important;
         flex: 1;
         width: 100%;
         height: 100%;
+        min-height: 0;
       }
       main.pos-container[data-mobile-view="products"] .col-scale {
         display: none !important;
@@ -1109,6 +1126,7 @@
         flex: 1;
         width: 100%;
         height: 100%;
+        min-height: 0;
         overflow-y: auto;
       }
       main.pos-container[data-mobile-view="scale"] .col-cart {
@@ -1126,16 +1144,96 @@
         flex: 1;
         width: 100%;
         height: 100%;
+        min-height: 0;
       }
 
-      /* Product Grid on Mobile: 2 Columns large and readable */
+      /* 4. กล่องค้นหาและแถบหมวดหมู่ ซ่อน Scrollbar ให้เนียนตา */
+      .catalog-search-bar {
+        padding: 4px 6px;
+        gap: 6px;
+      }
+      .search-input {
+        padding: 6px 10px;
+        font-size: 13px;
+      }
+      .customer-select {
+        font-size: 12px;
+        padding: 5px 6px;
+      }
+      .category-tabs {
+        padding: 4px 6px;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .category-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .category-tab {
+        padding: 4px 10px;
+        font-size: 12px;
+        height: 28px;
+        border-radius: 5px;
+      }
+
+      /* 5. การ์ดสินค้าความหนาแน่นสูง (High-Density Cards) สำหรับมือถือและแท็บเล็ต */
       .product-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 6px;
-        padding: 6px;
+        grid-auto-rows: 96px !important;
+        gap: 5px;
+        padding: 5px;
+      }
+      .product-card {
+        padding: 4px 6px;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .card-img-wrap {
+        height: 38px;
+        min-height: 38px;
+        margin-bottom: 2px;
+        border-radius: 4px;
+      }
+      .card-icon-emoji {
+        font-size: 24px;
+      }
+      .card-name {
+        font-size: 11.5px;
+        font-weight: 700;
+        line-height: 1.15;
+        height: 26px;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .card-prices {
+        margin-top: 1px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .price-thb {
+        font-size: 13.5px;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .price-lak {
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1;
+      }
+      .card-badge {
+        font-size: 8.5px;
+        padding: 1px 4px;
+        top: 2px;
+        right: 2px;
       }
 
-      /* Floating Cart Bar on Products View */
+      /* 6. แถบลอยสรุปบิลหน้าร้าน (Floating Cart Bar) */
       main.pos-container[data-mobile-view="products"] .mobile-cart-float-bar.has-items {
         display: flex;
       }
@@ -1165,21 +1263,83 @@
       }
     }
 
-    @media (max-height: 520px) and (orientation: landscape) {
-      header.pos-header {
-        height: 38px;
-        min-height: 38px;
-        padding: 2px 8px;
+    /* 7. Tablet / iPad (กว้าง 541px ถึง 900px) ขยายแสดงผล 4-5 คอลัมน์ */
+    @media (min-width: 541px) and (max-width: 900px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+        grid-auto-rows: 105px !important;
+        gap: 6px;
+        padding: 6px;
       }
-      .pos-mobile-nav {
+      .card-img-wrap {
+        height: 44px;
+      }
+      .card-icon-emoji {
+        font-size: 28px;
+      }
+      .card-name {
+        font-size: 12.5px;
+        height: 28px;
+      }
+      .price-thb {
+        font-size: 14.5px;
+      }
+      .price-lak {
+        font-size: 11px;
+      }
+    }
+
+    /* 8. แนวนอนบนมือถือ (Phone Landscape: ความสูงไม่เกิน 540px) */
+    @media (max-height: 540px) {
+      header.compact-header {
+        height: 36px;
+        min-height: 36px;
         padding: 2px 6px;
       }
-      .mob-nav-btn {
-        padding: 4px;
+      .brand-logo {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+      }
+      .brand-title {
         font-size: 12px;
       }
+      .pos-mobile-nav {
+        padding: 2px 4px;
+        gap: 4px;
+      }
+      .mob-nav-btn {
+        padding: 3px 6px;
+        font-size: 11.5px;
+      }
       main.pos-container {
-        height: calc(100vh - 78px);
+        height: calc(100vh - 70px);
+        padding: 2px;
+        gap: 2px;
+      }
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)) !important;
+        grid-auto-rows: 84px !important;
+        gap: 4px;
+        padding: 4px;
+      }
+      .card-img-wrap {
+        height: 28px;
+        min-height: 28px;
+        margin-bottom: 1px;
+      }
+      .card-icon-emoji {
+        font-size: 18px;
+      }
+      .card-name {
+        font-size: 11px;
+        height: 24px;
+      }
+      .price-thb {
+        font-size: 12.5px;
+      }
+      .price-lak {
+        font-size: 9.5px;
       }
       .scale-hud-box {
         padding: 4px;
