@@ -520,6 +520,91 @@
       outline: none;
       border-color: var(--primary);
     }
+
+    /* Mobile & Tablet Responsive Engine (Universal Off-Canvas Drawer & Compact Layout) */
+    @media (max-width: 900px) {
+      aside.admin-sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        z-index: 1000;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 20px rgba(0,0,0,0.35);
+      }
+      aside.admin-sidebar.open {
+        left: 0;
+      }
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(2px);
+        z-index: 999;
+      }
+      .sidebar-backdrop.active {
+        display: block;
+      }
+      main.admin-content {
+        width: 100%;
+        min-width: 0;
+      }
+      .mobile-nav-toggle {
+        display: inline-flex !important;
+      }
+      header.admin-topbar {
+        padding: 0 10px;
+        gap: 6px;
+      }
+      .topbar-title {
+        font-size: 13px;
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .admin-pill {
+        font-size: 11px;
+        padding: 3px 6px;
+      }
+      .tab-content-area {
+        padding: 10px;
+      }
+      .table-responsive {
+        max-height: calc(100vh - 180px);
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+    }
+
+    @media (max-height: 520px) and (orientation: landscape) {
+      header.admin-topbar {
+        height: 42px;
+        padding: 0 8px;
+      }
+      .topbar-title {
+        font-size: 12px;
+      }
+      .tab-content-area {
+        padding: 6px;
+      }
+      .table-responsive {
+        max-height: calc(100vh - 130px);
+      }
+      .panel-card {
+        margin-bottom: 10px;
+      }
+      .panel-header {
+        padding: 8px 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -574,10 +659,12 @@
       <div>ร้านหมอน้อยฟู้ด • อ.นิคมคำสร้อย</div>
     </div>
   </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleAdminSidebar(false)"></div>
 
   <!-- Main Content Area -->
   <main class="admin-content">
     <header class="admin-topbar">
+      <button type="button" class="btn-secondary mobile-nav-toggle" onclick="toggleAdminSidebar()" style="display: none; padding: 5px 10px; font-size: 13.5px; font-weight: 800; background: #0284c7; color: #ffffff; border: 1px solid #0369a1; border-radius: 6px; cursor: pointer; align-items: center; gap: 4px; white-space: nowrap; flex-shrink: 0;" title="เปิด/ปิด เมนูระบบหลังร้าน">☰ เมนู</button>
       <div class="topbar-title" id="tab-title">📊 แดชบอร์ดภาพรวม (Dashboard Overview)</div>
       <div class="topbar-actions">
         <div class="admin-pill">ผู้ใช้: <strong id="admin-user-pill">เทพอภัย</strong></div>
@@ -6698,8 +6785,24 @@ window.cloudSyncService = new CloudSyncService();
       });
     }
 
+    // Mobile Sidebar Drawer Toggle
+    function toggleAdminSidebar(force) {
+      const sb = document.querySelector('aside.admin-sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (!sb) return;
+      const isOpen = typeof force === 'boolean' ? force : !sb.classList.contains('open');
+      if (isOpen) {
+        sb.classList.add('open');
+        if (backdrop) backdrop.classList.add('active');
+      } else {
+        sb.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('active');
+      }
+    }
+
     // Navigation Tabs
     function switchTab(tabId) {
+      toggleAdminSidebar(false);
       if (window.authService && !authService.canAccessTab(tabId)) {
         alert('ท่านไม่มีสิทธิ์เข้าถึงส่วนนี้');
         return;

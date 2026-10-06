@@ -993,6 +993,202 @@
       #print-iframe, #thermal-receipt-container, #thermal-receipt-container * { visibility: visible; }
       #thermal-receipt-container { position: absolute; left: 0; top: 0; }
     }
+
+    /* Mobile Navigation Bar & Responsive POS Engine (Universal Viewport Switching) */
+    .pos-mobile-nav {
+      display: none;
+    }
+    .mobile-cart-float-bar {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      /* Mobile Header */
+      header.pos-header {
+        height: auto;
+        min-height: 46px;
+        padding: 4px 8px;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .brand-title {
+        font-size: 13.5px;
+      }
+      .status-group {
+        overflow-x: auto;
+        max-width: 100%;
+        padding-bottom: 2px;
+        gap: 4px;
+      }
+      .status-pill {
+        font-size: 10px;
+        padding: 2px 5px;
+      }
+      .header-actions {
+        overflow-x: auto;
+        max-width: 100%;
+        padding-bottom: 2px;
+        gap: 4px;
+      }
+      .hdr-btn {
+        font-size: 11px;
+        padding: 4px 8px;
+        white-space: nowrap;
+      }
+
+      /* Mobile Segment Switcher Tabs */
+      .pos-mobile-nav {
+        display: flex;
+        background: #0f172a;
+        padding: 4px 8px;
+        gap: 6px;
+        border-bottom: 2px solid #0284c7;
+        flex-shrink: 0;
+      }
+      .mob-nav-btn {
+        flex: 1;
+        padding: 8px 4px;
+        font-size: 13.5px;
+        font-weight: 800;
+        background: #1e293b;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.15s ease;
+      }
+      .mob-nav-btn.active {
+        background: #0284c7;
+        color: #ffffff;
+        border-color: #38bdf8;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+      }
+      .mob-cart-badge {
+        background: #ef4444;
+        color: #ffffff;
+        font-size: 10px;
+        font-weight: 900;
+        padding: 1px 6px;
+        border-radius: 10px;
+        margin-left: 2px;
+      }
+
+      /* Mobile POS Container Viewport */
+      main.pos-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px);
+        padding: 4px;
+        gap: 4px;
+        position: relative;
+      }
+
+      /* View-based Column Display */
+      main.pos-container[data-mobile-view="products"] .col-products {
+        display: flex !important;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+      }
+      main.pos-container[data-mobile-view="products"] .col-scale {
+        display: none !important;
+      }
+      main.pos-container[data-mobile-view="products"] .col-cart {
+        display: none !important;
+      }
+
+      main.pos-container[data-mobile-view="scale"] .col-products {
+        display: none !important;
+      }
+      main.pos-container[data-mobile-view="scale"] .col-scale {
+        display: flex !important;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+      }
+      main.pos-container[data-mobile-view="scale"] .col-cart {
+        display: none !important;
+      }
+
+      main.pos-container[data-mobile-view="cart"] .col-products {
+        display: none !important;
+      }
+      main.pos-container[data-mobile-view="cart"] .col-scale {
+        display: none !important;
+      }
+      main.pos-container[data-mobile-view="cart"] .col-cart {
+        display: flex !important;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Product Grid on Mobile: 2 Columns large and readable */
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px;
+        padding: 6px;
+      }
+
+      /* Floating Cart Bar on Products View */
+      main.pos-container[data-mobile-view="products"] .mobile-cart-float-bar.has-items {
+        display: flex;
+      }
+      .mobile-cart-float-bar {
+        position: fixed;
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        background: #0f172a;
+        border: 2px solid #0284c7;
+        border-radius: 8px;
+        padding: 8px 12px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        z-index: 100;
+        cursor: pointer;
+      }
+      .mob-float-pay-btn {
+        background: #16a34a;
+        color: #ffffff;
+        font-size: 12.5px;
+        font-weight: 800;
+        padding: 5px 10px;
+        border-radius: 6px;
+      }
+    }
+
+    @media (max-height: 520px) and (orientation: landscape) {
+      header.pos-header {
+        height: 38px;
+        min-height: 38px;
+        padding: 2px 8px;
+      }
+      .pos-mobile-nav {
+        padding: 2px 6px;
+      }
+      .mob-nav-btn {
+        padding: 4px;
+        font-size: 12px;
+      }
+      main.pos-container {
+        height: calc(100vh - 78px);
+      }
+      .scale-hud-box {
+        padding: 4px;
+        margin: 4px;
+      }
+      .scale-digits {
+        font-size: 32px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1046,8 +1242,21 @@
     </div>
   </header>
 
+  <!-- Mobile View Segment Controller (Hidden on Desktop & 14" POS, Visible on Mobile/Tablet) -->
+  <nav class="pos-mobile-nav" id="pos-mobile-nav">
+    <button type="button" class="mob-nav-btn active" id="mob-btn-products" onclick="switchMobilePosView('products')">
+      🥩 สินค้า
+    </button>
+    <button type="button" class="mob-nav-btn" id="mob-btn-scale" onclick="switchMobilePosView('scale')">
+      ⚖️ ตราชั่ง
+    </button>
+    <button type="button" class="mob-nav-btn" id="mob-btn-cart" onclick="switchMobilePosView('cart')">
+      🧾 บิลขาย <span class="mob-cart-badge" id="mob-cart-count">0</span>
+    </button>
+  </nav>
+
   <!-- 3-COLUMN MAIN POS WORKSPACE -->
-  <main class="pos-container">
+  <main class="pos-container" id="pos-main-container" data-mobile-view="products">
 
     <!-- COLUMN 1: Category & Product Catalog -->
     <section class="col-products">
@@ -1283,6 +1492,18 @@
         </div>
       </div>
     </section>
+
+    <!-- Mobile Quick Cart Floating Bar (Only appears when items in cart on mobile) -->
+    <div class="mobile-cart-float-bar" id="mobile-cart-float-bar" onclick="switchMobilePosView('cart')">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">🛒</span>
+        <div>
+          <div style="font-size: 11px; color: #94a3b8;">ตะกร้าบิลขาย (<span id="mob-float-count">0</span> รายการ)</div>
+          <div style="font-size: 15px; font-weight: 900; color: #38bdf8;" id="mob-float-total">฿0.00</div>
+        </div>
+      </div>
+      <div class="mob-float-pay-btn">ไปที่หน้าชำระเงิน ▶</div>
+    </div>
 
   </main>
 
@@ -7289,6 +7510,41 @@ window.cloudSyncService = new CloudSyncService();
       });
     }
 
+    // Mobile View Segment Controller Switcher
+    function switchMobilePosView(viewName) {
+      const container = document.getElementById('pos-main-container');
+      if (container) {
+        container.setAttribute('data-mobile-view', viewName);
+      }
+      document.querySelectorAll('.mob-nav-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`mob-btn-${viewName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const mobFloatBar = document.getElementById('mobile-cart-float-bar');
+      if (mobFloatBar) {
+        if (viewName === 'cart' || cart.length === 0 || window.innerWidth > 900) {
+          mobFloatBar.style.display = 'none';
+        } else {
+          mobFloatBar.style.display = 'flex';
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Auto-adjust view on orientation change or window resize
+    window.addEventListener('resize', () => {
+      const mobFloatBar = document.getElementById('mobile-cart-float-bar');
+      if (mobFloatBar) {
+        const container = document.getElementById('pos-main-container');
+        const currentView = container ? container.getAttribute('data-mobile-view') : 'products';
+        if (window.innerWidth <= 900 && cart.length > 0 && currentView !== 'cart') {
+          mobFloatBar.style.display = 'flex';
+        } else {
+          mobFloatBar.style.display = 'none';
+        }
+      }
+    });
+
     function onProductClick(product) {
       if (product.is_weight) {
         // Send to Live Scale Station
@@ -7301,6 +7557,11 @@ window.cloudSyncService = new CloudSyncService();
         document.getElementById('weigh-item-subtitle').innerText = `ราคา ฿${unitPrice.toFixed(2)} /กก.`;
 
         recalcActiveWeighedItem();
+
+        // Switch to scale tab on mobile/tablet view
+        if (window.innerWidth <= 900) {
+          switchMobilePosView('scale');
+        }
       } else {
         // Fixed unit/piece -> add directly to cart
         addToCart(product, 1);
@@ -7348,6 +7609,11 @@ window.cloudSyncService = new CloudSyncService();
       document.getElementById('weigh-calc-lak').innerText = '0 ₭';
       document.getElementById('btn-add-weighed-item').setAttribute('disabled', 'true');
       renderProductGrid();
+
+      // Return to products view on mobile/tablet view
+      if (window.innerWidth <= 900) {
+        switchMobilePosView('products');
+      }
     }
 
     // Cart Management
@@ -7760,6 +8026,25 @@ window.cloudSyncService = new CloudSyncService();
       document.getElementById('subtotal-thb-label').innerText = `฿${subtotal.toLocaleString('th-TH', { minimumFractionDigits: 2 })}`;
       document.getElementById('grand-total-thb').innerText = `฿${netThb.toLocaleString('th-TH', { minimumFractionDigits: 2 })}`;
       document.getElementById('grand-total-lak').innerText = `${netLak.toLocaleString()} ₭`;
+
+      // Mobile / Tablet badge & floating cart sync
+      const mobCartCount = document.getElementById('mob-cart-count');
+      if (mobCartCount) mobCartCount.innerText = cart.length;
+      const mobFloatCount = document.getElementById('mob-float-count');
+      if (mobFloatCount) mobFloatCount.innerText = cart.length;
+      const mobFloatTotal = document.getElementById('mob-float-total');
+      if (mobFloatTotal) mobFloatTotal.innerText = `฿${netThb.toLocaleString('th-TH', { minimumFractionDigits: 2 })}`;
+
+      const mobFloatBar = document.getElementById('mobile-cart-float-bar');
+      if (mobFloatBar) {
+        if (cart.length > 0 && window.innerWidth <= 900) {
+          const container = document.getElementById('pos-main-container');
+          const currentView = container ? container.getAttribute('data-mobile-view') : 'products';
+          mobFloatBar.style.display = (currentView === 'cart') ? 'none' : 'flex';
+        } else {
+          mobFloatBar.style.display = 'none';
+        }
+      }
     }
 
     function changePriceTier(tier) {
